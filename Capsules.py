@@ -77,7 +77,7 @@ class ConvCaps(nn.Module):
             self.W = nn.Parameter(torch.randn(self.B, self.C, 4, 4)) #B,C,4,4
         self.iteration=iteration
 
-    def forward(self, x, lambda):
+    def forward(self, x, lambda_):
 #        t = time()
         b = x.size(0) #batchsize
         width_in = x.size(2)  #12
@@ -153,7 +153,7 @@ class ConvCaps(nn.Module):
             sigma = sigma.clamp(0.01) #prevent nan since the following is a log(sigma)
             cost = (self.beta_v + torch.log(sigma)) * sum_r_hat #b,1,Cww,16
             beta_a_stack = self.beta_a.view(1,self.C,1).expand(b,self.C,w*w).contiguous().view(b,1,Cww)#b,Cww
-            a_c = torch.sigmoid(lambda*(beta_a_stack-torch.sum(cost,3))) #b,1,Cww
+            a_c = torch.sigmoid(lambda_*(beta_a_stack-torch.sum(cost,3))) #b,1,Cww
             mus = mu.view(b,self.C,w,w,16) #b,C,w,w,16
             sigmas = sigma.view(b,self.C,w,w,16) #b,C,w,w,16
             activations = a_c.view(b,self.C,w,w) #b,C,w,w
