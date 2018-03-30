@@ -163,13 +163,13 @@ class ConvCaps(nn.Module):
             #E-step
             for i in range(width_in):
                 #compute the x axis range of capsules c that i connect to.
-                x_range = int(max(floor((i-self.K)/self.stride)+1,0),min(i//self.stride+1,width_out))
+                x_range = (int(max(floor((i-self.K)/self.stride)+1,0)),int(min(i//self.stride+1,width_out)))
                 #without padding, some capsules i may not be convolutional layer catched, in mnist case, i or j == 11
                 u = len(range(*x_range))
                 if not u:
                     continue
                 for j in range(width_in):
-                    y_range = int(max(floor((j-self.K)/self.stride)+1,0),min(j//self.stride+1,width_out))
+                    y_range = (int(max(floor((j-self.K)/self.stride)+1,0)),int(min(j//self.stride+1,width_out)))
 
                     v = len(range(*y_range))
                     if not v:
