@@ -77,7 +77,7 @@ class ConvCaps(nn.Module):
             self.W = nn.Parameter(torch.randn(self.B, self.C, 4, 4)) #B,C,4,4
         self.iteration=iteration
 
-    def forward(self, x, lambda_):
+    def forward(self, x, lambda_,):
 #        t = time()
         b = x.size(0) #batchsize
         width_in = x.size(2)  #12
@@ -163,13 +163,13 @@ class ConvCaps(nn.Module):
             #E-step
             for i in range(width_in):
                 #compute the x axis range of capsules c that i connect to.
-                x_range = (max(floor((i-self.K)/self.stride)+1,0),min(i//self.stride+1,width_out))
+                x_range = int(max(floor((i-self.K)/self.stride)+1,0),min(i//self.stride+1,width_out))
                 #without padding, some capsules i may not be convolutional layer catched, in mnist case, i or j == 11
                 u = len(range(*x_range))
                 if not u:
                     continue
                 for j in range(width_in):
-                    y_range = (max(floor((j-self.K)/self.stride)+1,0),min(j//self.stride+1,width_out))
+                    y_range = int(max(floor((j-self.K)/self.stride)+1,0),min(j//self.stride+1,width_out))
 
                     v = len(range(*y_range))
                     if not v:
